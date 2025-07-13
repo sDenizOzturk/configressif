@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react()],
   base: "./",
   build: {
-    outDir: path.resolve(__dirname, "../playground/data/"),
-    emptyOutDir: true,
-  },
+    outDir: path.resolve(__dirname, "../workbench/data/"),
+    emptyOutDir: true
+  }
 });

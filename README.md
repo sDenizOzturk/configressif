@@ -5,43 +5,6 @@
 
 ---
 
-## plan-2 (13:45 13.07.2025)
-
--
-
-### ✅ Added
-
-- A minimal **React + TypeScript** UI was created using Vite
-
-- UI includes two main buttons: “Device Settings” and “Network Settings”
-
-- React app is configured to build into `workbench/data/configressif/`
-
-- A new **PlatformIO** project (`workbench/`) was added to test the integration
-
-- Firmware now:
-
-  - Starts in **Access Point mode** by default
-  - Serves the UI from SPIFFS (`data/` directory)
-
-- The `configressif` library is placed inside `workbench/lib/configressif` and compiled locally
-
-- SPIFFS mount and HTTP serving are now functional
-
-- ⚠️ **C++ source code is now written inside `workbench/` only.**
-  The root `/lib/configressif` and `/data/` folders will be populated **automatically via CI/CD**.
-
-### 🛠️ Next Planned Step (issue-2)
-
-- **CI/CD** integration:
-
-  - Automatically copy `workbench/lib/configressif` → `/lib/configressif`
-  - Automatically copy `workbench/data` → `/data`
-  - Verify that files are correctly copied (e.g., via test or checksum)
-  - Run frontend lint/build steps before final copy
-
----
-
 ## plan-1 (18:24 12.07.2025)
 
 ### 🧭 What is Configressif?
