@@ -9,7 +9,7 @@ function App() {
           flexDirection: "column",
           alignItems: "center",
           gap: "1rem",
-          marginTop: "4rem",
+          marginTop: "4rem"
         }}
       >
         <button onClick={() => alert("Device Settings Clicked")}>
