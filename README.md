@@ -5,6 +5,94 @@
 
 ---
 
+## plan-3 (20:11 17.07.2025)
+
+### ✅ Added
+
+- Created a new branch: `feature/wifi-config`
+- Developed a complete **Network Settings Page** with the following fields:
+
+  - `wifiEnabled` (checkbox)
+  - `ssid` (text)
+  - `password` (password)
+  - `dhcpEnabled` (checkbox)
+  - `ip`, `gateway`, `subnet` (conditional text inputs)
+
+- Implemented dynamic field visibility:
+
+  - All fields are hidden unless `wifiEnabled` is true
+  - `ip`, `gateway`, `subnet` are shown only if `dhcpEnabled` is false
+
+- Validation rules:
+
+  - IP address validation via reusable `IP_ADDRESS_RULES`
+  - Password must be 8–63 chars if not empty (WPA2/3)
+  - SSID must be ≤ 32 characters, required if Wi-Fi is enabled
+
+- Added automatic `gateway` and `subnet` prefill when IP is entered
+- Implemented reusable components:
+
+  - `FormTextInput`, `FormCheckbox`, `FormButton`
+
+- Cleaned up base styles (`index.css`) and removed unused global CSS
+- Created `utils/urls.ts` to determine API base path dynamically (based on dev/prod)
+- Created a dummy backend (`dummy-server`) using Express + TypeScript:
+
+  - Routes defined in `routes/`, handlers in `controller/`
+  - Supports GET/POST to `/network` for simulated data exchange
+  - Added `concurrently`, `ts-node`, `nodemon` for development
+
+- Frontend fetches initial data from dummy backend using `useEffect`
+- Submit button POSTs the full form to the dummy backend
+- CORS is enabled on the dummy server
+- CI/CD-ready structure: backend and frontend can be run with a single command
+
+### 🛠️ Next Planned Step
+
+- Write end-to-end tests for network configuration
+- Connect with actual ESP32 backend via `/network`
+- Sync NVS read/write with C++ HTTP handlers
+- Auto-deploy dummy-server + React via CI
+
+---
+
+## plan-2 (13:45 13.07.2025)
+
+-
+
+### ✅ Added
+
+- A minimal **React + TypeScript** UI was created using Vite
+
+- UI includes two main buttons: “Device Settings” and “Network Settings”
+
+- React app is configured to build into workbench/data/configressif/
+
+- A new **PlatformIO** project (workbench/) was added to test the integration
+
+- Firmware now:
+
+  - Starts in **Access Point mode** by default
+  - Serves the UI from SPIFFS (data/ directory)
+
+- The configressif library is placed inside workbench/lib/configressif and compiled locally
+
+- SPIFFS mount and HTTP serving are now functional
+
+- ⚠️ **C++ source code is now written inside workbench/ only.**
+  The root /lib/configressif and /data/ folders will be populated **automatically via CI/CD**.
+
+### 🛠️ Next Planned Step (issue-2)
+
+- **CI/CD** integration:
+
+  - Automatically copy workbench/lib/configressif → /lib/configressif
+  - Automatically copy workbench/data → /data
+  - Verify that files are correctly copied (e.g., via test or checksum)
+  - Run frontend lint/build steps before final copy
+
+---
+
 ## plan-1 (18:24 12.07.2025)
 
 ### 🧭 What is Configressif?

@@ -1,26 +1,13 @@
-import "./App.css";
+import { Routes, Route } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import NetworkSettingsPage from "./pages/NetworkSettingsPage";
 
 function App() {
   return (
-    <>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "1rem",
-          marginTop: "4rem"
-        }}
-      >
-        <button onClick={() => alert("Device Settings Clicked")}>
-          Device Settings
-        </button>
-        <button onClick={() => alert("Network Settings Clicked")}>
-          Network Settings
-        </button>
-      </div>
-    </>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/network" element={<NetworkSettingsPage />} />
+    </Routes>
   );
 }
-
 export default App;

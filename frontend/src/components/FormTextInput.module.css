@@ -1,0 +1,22 @@
+.input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  transition: border-color 0.2s ease;
+}
+
+.input:hover {
+  border-color: green;
+}
+
+.error {
+  border-color: red;
+}
+
+.error:hover {
+  border-color: red;
+}
+
+.input:focus {
+  outline: none;
+}
