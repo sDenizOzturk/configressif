@@ -10,9 +10,15 @@
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start:frontend": "vite preview --port 5173",
+    "start:dummy-server": "tsc -p ../dummy-server && node ../dummy-server/dist/index.js",
+    "start:full": "concurrently -k \"npm run start:dummy-server\" \"npm run start:frontend\"",
+    "test:e2e": "start-server-and-test start:full http://localhost:5173 \"playwright test\"",
+    "test": "npm run build && npm run test:e2e"
   },
   "dependencies": {
+    "connect-history-api-fallback": "^2.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.60.0",
@@ -20,7 +26,9 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",
-    "@types/node": "^24.0.13",
+    "@playwright/test": "^1.54.1",
+    "@types/connect-history-api-fallback": "^1.5.4",
+    "@types/node": "^24.0.14",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.6.0",
@@ -30,6 +38,7 @@
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
     "prettier": "^3.6.2",
+    "start-server-and-test": "^2.0.12",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.35.1",
     "vite": "^7.0.4"
