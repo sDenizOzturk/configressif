@@ -60,8 +60,8 @@ test("Full form submission with static IP reflects after reload", async ({
   // Wait shortly to ensure POST is processed
   await page.waitForTimeout(100);
 
-  // Reload page to trigger fetch from backend
-  await page.reload();
+  await expect(page).toHaveURL("/reboot");
+  await page.goto("/network");
 
   // Form fields should reflect saved data
   await expect(page.getByLabel("Use WIFI")).toBeChecked();

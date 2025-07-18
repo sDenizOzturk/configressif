@@ -18,5 +18,13 @@ export const getNetworkConfig = (_req: Request, res: Response) => {
 
 export const setNetworkConfig = (req: Request, res: Response) => {
   storedNetworkConfig = req.body;
-  res.json({ success: true });
+  console.log("[dummy-server] Received network config:", storedNetworkConfig);
+
+  res.json({
+    status: "ok",
+    reboot: {
+      countdown: 3,
+      redirectAfter: 20,
+    },
+  });
 };

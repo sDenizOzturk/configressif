@@ -3,8 +3,10 @@ import { FormTextInput } from "../components/FormTextInput";
 import type { WifiConfigForm } from "../models/wifi-config";
 import { FormCheckbox } from "../components/FormCheckbox";
 import { FormButton } from "../components/FormButton";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { API_NETWORK_URL } from "../../utils/urls";
+import { Spinner } from "../components/Spinner";
+import { useReboot, type RebootOptions } from "../hooks/useReboot";
 
 const IP_ADDRESS_RULES = {
   required: "An IP address is required",
@@ -58,8 +60,11 @@ const NetworkSettingsPage = () => {
     }
   };
 
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     const fetchConfig = async () => {
+      setIsLoading(true);
       try {
         const response = await fetch(API_NETWORK_URL);
         const data: WifiConfigForm = await response.json();
@@ -67,12 +72,20 @@ const NetworkSettingsPage = () => {
       } catch (error) {
         console.error("Failed to fetch network config:", error);
       }
+      setIsLoading(false);
     };
 
     fetchConfig();
   }, [reset]);
 
+  const [rebootOptions, setRebootOptions] = useState<
+    RebootOptions | undefined
+  >();
+
+  useReboot(rebootOptions);
+
   const onSubmit = async (data: WifiConfigForm) => {
+    setIsLoading(true);
     try {
       const response = await fetch(API_NETWORK_URL, {
         method: "POST",
@@ -86,11 +99,19 @@ const NetworkSettingsPage = () => {
         throw new Error(`Server responded with ${response.status}`);
       }
 
-      console.log("Saved successfully:", await response.json());
+      const result = await response.json();
+      console.log("Saved successfully:", result);
+
+      setRebootOptions(result.reboot);
     } catch (error) {
       console.error("Failed to save config:", error);
     }
+    setIsLoading(false);
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <div

@@ -13,6 +13,9 @@ namespace configressif
 
     private:
         AsyncWebServer server;
+        void handleStaticFiles();
+        void handleNetworkGet();
+        void handleNetworkPost();
     };
 
 } // namespace configressif
