@@ -1,0 +1,26 @@
+{
+  "name": "dummy-server",
+  "version": "1.0.0",
+  "scripts": {
+    "build:watch": "tsc --watch",
+    "serve": "nodemon dist/index.js",
+    "dev": "concurrently \"npm run build:watch\" \"npm run serve\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.0.14",
+    "concurrently": "^9.2.0",
+    "cors": "^2.8.5",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
