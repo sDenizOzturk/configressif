@@ -1,0 +1,16 @@
+[
+  { "label": "pool.ntp.org (Global)", "value": "pool.ntp.org" },
+  { "label": "time.google.com", "value": "time.google.com" },
+  { "label": "time.cloudflare.com", "value": "time.cloudflare.com" },
+  { "label": "time.windows.com", "value": "time.windows.com" },
+  { "label": "time.apple.com", "value": "time.apple.com" },
+  { "label": "europe.pool.ntp.org", "value": "europe.pool.ntp.org" },
+  { "label": "asia.pool.ntp.org", "value": "asia.pool.ntp.org" },
+  {
+    "label": "north-america.pool.ntp.org",
+    "value": "north-america.pool.ntp.org"
+  },
+  { "label": "africa.pool.ntp.org", "value": "africa.pool.ntp.org" },
+  { "label": "oceania.pool.ntp.org", "value": "oceania.pool.ntp.org" },
+  { "label": "ntp.ubuntu.com", "value": "ntp.ubuntu.com" }
+]

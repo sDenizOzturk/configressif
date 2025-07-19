@@ -1,5 +1,6 @@
 #include "configressif.h"
 #include "networkmanager.h"
+#include "ntpmanager.h"
 #include "httpserver.h"
 
 namespace configressif
@@ -7,13 +8,13 @@ namespace configressif
 
     namespace
     {
-        NetworkManager networkManager;
         HttpServer httpServer;
     }
 
     void Configressif::init()
     {
-        networkManager.begin();
+        NetworkManager::begin();
+        NtpManager::configure();
         httpServer.begin();
     }
 

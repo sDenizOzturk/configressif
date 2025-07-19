@@ -5,6 +5,58 @@
 
 ---
 
+## plan-4 (15:33 18.07.2025)
+
+### 🧭 Goal
+
+Add support for configuring **NTP (Network Time Protocol)** settings via the web interface.
+Users will be able to specify an NTP server and timezone offset. These values will be stored in NVS and used to set the internal clock.
+
+---
+
+### ✅ Planned Features
+
+- A new settings page at `/ntp` with the following fields:
+
+  - `enabled` (checkbox)
+  - `server` (text, default: `pool.ntp.org`)
+  - `timezoneOffset` (number, default: 0, unit: hours)
+
+- Form behavior:
+
+  - All fields hidden unless `enabled` is true
+  - Validation: `server` is required, offset must be a number
+
+- Firmware:
+
+  - `NtpConfig` singleton for storing and loading settings (with `toJson`/`setFromJson`)
+  - `NtpParameters` for static access to values
+  - `NtpManager` for handling actual time sync with `configTime(...)`
+  - HTTP handlers:
+
+    - `GET /api/ntp` → return current config
+    - `POST /api/ntp` → update config and schedule reboot
+
+- Reboot flow:
+
+  - Same pattern as Wi-Fi config (`/reboot` page, countdown, redirect)
+  - Use `RestartManager::schedule(seconds)` after saving
+
+- Dummy backend support:
+
+  - Simulate NTP config using same structure
+  - Returns reboot instructions for test environment
+
+- Testing:
+
+  - Add Playwright e2e tests for:
+
+    - Toggling NTP on/off
+    - Changing server/offset
+    - Post-submit reboot and reload verification
+
+---
+
 ## plan-3 (20:11 17.07.2025)
 
 ### ✅ Added

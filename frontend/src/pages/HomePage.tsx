@@ -13,8 +13,8 @@ const HomePage: React.FC = () => {
         gap: "1rem"
       }}
     >
-      <button onClick={() => navigate("/device")}>Device Settings</button>
       <button onClick={() => navigate("/network")}>Network Settings</button>
+      <button onClick={() => navigate("/ntp")}>Ntp Settings</button>
     </div>
   );
 };

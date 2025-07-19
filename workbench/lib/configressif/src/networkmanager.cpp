@@ -8,6 +8,8 @@
 namespace configressif
 {
 
+    const IPAddress DNS_SERVER(8, 8, 8, 8);
+
     void NetworkManager::begin()
     {
         if (WifiParameters::wifiEnabled())
@@ -21,7 +23,7 @@ namespace configressif
                     gateway.fromString(WifiParameters::gateway()) &&
                     subnet.fromString(WifiParameters::subnet()))
                 {
-                    WiFi.config(localIP, gateway, subnet);
+                    WiFi.config(localIP, gateway, subnet, DNS_SERVER);
                     Serial.println("[WiFi] Static IP configuration applied.");
                 }
                 else
