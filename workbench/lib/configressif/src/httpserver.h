@@ -16,6 +16,8 @@ namespace configressif
         void handleStaticFiles();
         void handleNetworkGet();
         void handleNetworkPost();
+        void handleNtpGet();
+        void handleNtpPost();
     };
 
 } // namespace configressif

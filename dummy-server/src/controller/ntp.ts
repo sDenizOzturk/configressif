@@ -24,13 +24,13 @@ export const setNtpConfig = (req: Request, res: Response) => {
   });
 };
 
-export const getSimulatedCurrentTime = (): number | null => {
-  if (!storedNtpConfig.enabled) return null;
+export const getSimulatedCurrentTime = (): number | undefined => {
+  if (!storedNtpConfig.enabled) return undefined;
 
   const localNow = new Date();
   const timezoneOffsetMs = localNow.getTimezoneOffset() * 60 * 1000;
   const utcNow = Date.now() + timezoneOffsetMs;
   const offsetMs = storedNtpConfig.timezoneOffset * 60 * 60 * 1000;
 
-  return utcNow + offsetMs;
+  return (utcNow + offsetMs) / 1000; // return seconds since epoch
 };

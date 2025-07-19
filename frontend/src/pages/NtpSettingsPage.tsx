@@ -9,6 +9,7 @@ import { FormSelect } from "../components/FormSelect";
 import type { NtpConfigForm } from "../models/ntp-config";
 import { useTimezoneOffsets } from "../hooks/useTimezoneOffsets";
 import { useNtpServers } from "../hooks/useNtpServers";
+import { useMultiLoading } from "../hooks/useMultiLoading";
 
 type NtpResponse = NtpConfigForm & {
   currentTime: number;
@@ -28,17 +29,18 @@ const NtpSettingsPage = () => {
 
   const enabled = watch("enabled");
 
-  const [initialSystemTime, setInitialSystemTime] = useState<number | null>(
-    null
-  );
-  const [isLoading, setIsLoading] = useState(true);
+  const [initialSystemTime, setInitialSystemTime] = useState<
+    number | undefined
+  >(undefined);
 
-  const NTP_SERVERS = useNtpServers(setIsLoading);
-  const TIMEZONE_OFFSETS = useTimezoneOffsets(setIsLoading);
+  const { startLoading, stopLoading, isLoading } = useMultiLoading();
+
+  const NTP_SERVERS = useNtpServers({ startLoading, stopLoading });
+  const TIMEZONE_OFFSETS = useTimezoneOffsets({ startLoading, stopLoading });
 
   useEffect(() => {
     const fetchConfig = async () => {
-      setIsLoading(true);
+      startLoading();
       try {
         const response = await fetch(API_NTP_URL);
         const data: NtpResponse = await response.json();
@@ -47,14 +49,14 @@ const NtpSettingsPage = () => {
       } catch (error) {
         console.error("Failed to fetch NTP config:", error);
       }
-      setIsLoading(false);
+      stopLoading();
     };
 
     fetchConfig();
-  }, [reset]);
+  }, [reset, startLoading, stopLoading]);
 
   const onSubmit = async (data: NtpConfigForm) => {
-    setIsLoading(true);
+    startLoading();
     try {
       const response = await fetch(API_NTP_URL, {
         method: "POST",
@@ -70,7 +72,7 @@ const NtpSettingsPage = () => {
     } catch (error) {
       console.error("Failed to save NTP config:", error);
     }
-    setIsLoading(false);
+    stopLoading();
   };
 
   if (isLoading) return <Spinner />;

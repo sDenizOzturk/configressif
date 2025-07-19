@@ -2,12 +2,22 @@ import { useEffect, useState } from "react";
 
 type Offset = { label: string; value: number };
 
-export function useTimezoneOffsets(setLoading?: (val: boolean) => void) {
+interface LoadingController {
+  startLoading: () => void;
+  stopLoading: () => void;
+}
+
+export function useTimezoneOffsets(loading?: LoadingController) {
   const [offsets, setOffsets] = useState<Offset[]>([]);
+
+  const { startLoading, stopLoading } = loading || {
+    startLoading: () => {},
+    stopLoading: () => {}
+  };
 
   useEffect(() => {
     const fetchOffsets = async () => {
-      if (setLoading) setLoading(true);
+      startLoading();
       try {
         const res = await fetch("/configs/timezone-offsets.json");
         const data: Offset[] = await res.json();
@@ -15,12 +25,12 @@ export function useTimezoneOffsets(setLoading?: (val: boolean) => void) {
       } catch (err) {
         console.error("Failed to load timezone offsets:", err);
       } finally {
-        if (setLoading) setLoading(false);
+        stopLoading();
       }
     };
 
     fetchOffsets();
-  }, [setLoading]);
+  }, [startLoading, stopLoading]);
 
   return offsets;
 }

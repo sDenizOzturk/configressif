@@ -6,7 +6,7 @@ namespace configressif
     class NetworkManager
     {
     public:
-        void begin();
+        static void begin();
     };
 
 } // namespace configressif

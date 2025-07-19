@@ -35,5 +35,6 @@ namespace configressif
     String m_gateway;
     String m_subnet;
   };
+  static constexpr const char *NVS_NAMESPACE = "wifi_config";
 
 } // namespace configressif

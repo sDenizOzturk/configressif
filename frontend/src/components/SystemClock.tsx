@@ -1,23 +1,22 @@
 import { useEffect, useState } from "react";
 
 type Props = {
-  initialTime: number | null;
+  initialTime?: number;
 };
 
-export function SystemClock({ initialTime }: Props) {
-  const [now, setNow] = useState<number | null>(initialTime);
-
+export const SystemClock = ({ initialTime }: Props) => {
   useEffect(() => {
-    if (initialTime === null) return;
+    if (initialTime == undefined) return;
 
     const interval = setInterval(() => {
-      setNow((prev) => (prev !== null ? prev + 1000 : null));
+      setNow((prev) => (prev !== null ? prev + 1 : null));
     }, 1000);
 
     return () => clearInterval(interval);
   }, [initialTime]);
 
-  if (now === null) return null;
+  const [now, setNow] = useState<number | null>(initialTime!);
+  if (!now) return;
 
   return (
     <div
@@ -30,10 +29,11 @@ export function SystemClock({ initialTime }: Props) {
     >
       <span style={{ fontWeight: "bold" }}>Current Device Time</span>
       <span>
-        {new Date(now).toLocaleString(undefined, {
-          hour12: false
+        {new Date(now * 1000).toLocaleString(undefined, {
+          hour12: false,
+          timeZone: "UTC"
         })}
       </span>
     </div>
   );
-}
+};

@@ -1,13 +1,26 @@
 import { useEffect, useState } from "react";
 
-type Server = { label: string; value: string };
+export interface Server {
+  label: string;
+  value: string;
+}
 
-export function useNtpServers(setLoading?: (val: boolean) => void) {
+interface LoadingController {
+  startLoading: () => void;
+  stopLoading: () => void;
+}
+
+export function useNtpServers(loading?: LoadingController) {
   const [servers, setServers] = useState<Server[]>([]);
+
+  const { startLoading, stopLoading } = loading || {
+    startLoading: () => {},
+    stopLoading: () => {}
+  };
 
   useEffect(() => {
     const load = async () => {
-      if (setLoading) setLoading(true);
+      startLoading();
       try {
         const res = await fetch("/configs/ntp-servers.json");
         const json: Server[] = await res.json();
@@ -15,12 +28,12 @@ export function useNtpServers(setLoading?: (val: boolean) => void) {
       } catch (err) {
         console.error("Failed to load NTP servers:", err);
       } finally {
-        if (setLoading) setLoading(false);
+        stopLoading();
       }
     };
 
     load();
-  }, [setLoading]);
+  }, [startLoading, stopLoading]);
 
   return servers;
 }

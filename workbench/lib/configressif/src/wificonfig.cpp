@@ -78,7 +78,7 @@ const String &WifiConfig::subnet() const { return m_subnet; }
 // Private: Save to NVS
 bool WifiConfig::saveToNVS() const
 {
-  prefs.begin("wifi_config", false);
+  prefs.begin(NVS_NAMESPACE, false);
   prefs.putBool("wifiEnabled", m_wifiEnabled);
   prefs.putString("ssid", m_ssid);
   prefs.putString("password", m_password);
@@ -93,7 +93,7 @@ bool WifiConfig::saveToNVS() const
 // Private: Load from NVS
 bool WifiConfig::loadFromNVS()
 {
-  prefs.begin("wifi_config", true);
+  prefs.begin(NVS_NAMESPACE, true);
   m_wifiEnabled = prefs.getBool("wifiEnabled", false);
   m_ssid = prefs.getString("ssid", "");
   m_password = prefs.getString("password", "");
