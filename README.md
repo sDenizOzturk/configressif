@@ -5,6 +5,43 @@
 
 ---
 
+### plan-5 (23:35 20.07.2025)
+
+#### 🧭 **Goal**
+
+Implement default config bootstrap from SPIFFS to NVS on first boot or after factory reset.
+
+#### ✅ **Core Features**
+
+- Implemented default configuration loaders:
+
+  - `network.json` → saved to NVS via `NetworkStorage`
+  - `ntp.json` → saved to NVS via `NtpStorage`
+  - `access-point.json` → loaded into memory (not saved)
+
+- All default JSONs are stored inside `/default/` in SPIFFS
+
+- Created the following config classes:
+
+  - `NetworkConfig` with singleton access, getters/setters, NVS sync
+  - `NtpConfig` with singleton access and initialization guard
+  - `AccessPointConfig` with runtime-only parameters (read-only, SPIFFS-only)
+
+- Added `StorageManager::init()` which:
+
+  - Mounts SPIFFS
+  - Reads from SPIFFS on first boot
+  - Persists default configs to NVS
+  - Writes an `initialized` flag to NVS
+
+- Added debug output for config loading steps and fallbacks
+
+- Introduced optional `DebugUtils::countdown()` for boot-time debugging
+
+- Factory reset system partially planned (low-level clearAll, clearFullStorage drafted, not exposed yet)
+
+---
+
 ## plan-4 (15:33 18.07.2025)
 
 ### 🧭 Goal
@@ -12,48 +49,19 @@
 Add support for configuring **NTP (Network Time Protocol)** settings via the web interface.
 Users will be able to specify an NTP server and timezone offset. These values will be stored in NVS and used to set the internal clock.
 
----
+#### ✅ Core Features
 
-### ✅ Planned Features
+- NTP config UI and API (see details above)
+- C++/backend NTP integration
+- Playwright tests and dummy-server support
 
-- A new settings page at `/ntp` with the following fields:
+#### 🛡️ **Additional Improvements**
 
-  - `enabled` (checkbox)
-  - `server` (text, default: `pool.ntp.org`)
-  - `timezoneOffset` (number, default: 0, unit: hours)
-
-- Form behavior:
-
-  - All fields hidden unless `enabled` is true
-  - Validation: `server` is required, offset must be a number
-
-- Firmware:
-
-  - `NtpConfig` singleton for storing and loading settings (with `toJson`/`setFromJson`)
-  - `NtpParameters` for static access to values
-  - `NtpManager` for handling actual time sync with `configTime(...)`
-  - HTTP handlers:
-
-    - `GET /api/ntp` → return current config
-    - `POST /api/ntp` → update config and schedule reboot
-
-- Reboot flow:
-
-  - Same pattern as Wi-Fi config (`/reboot` page, countdown, redirect)
-  - Use `RestartManager::schedule(seconds)` after saving
-
-- Dummy backend support:
-
-  - Simulate NTP config using same structure
-  - Returns reboot instructions for test environment
-
-- Testing:
-
-  - Add Playwright e2e tests for:
-
-    - Toggling NTP on/off
-    - Changing server/offset
-    - Post-submit reboot and reload verification
+- Async loading guard refactor with `useMultiLoading`, `firstValuesFetched`
+- Bugfix: uncontrolled select/input, -12 offset issue
+- Static DNS for static IP mode
+- Improved debug/serial logging (network/DNS/NTP)
+- API/data model sync: dummy-server, backend, frontend
 
 ---
 

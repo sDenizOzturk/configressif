@@ -3,7 +3,7 @@
 #include "networkmanager.h"
 #include "accesspoint.h"
 #include <WiFi.h>
-#include "wifiparameters.h"
+#include "networkparameters.h"
 
 namespace configressif
 {
@@ -12,16 +12,17 @@ namespace configressif
 
     void NetworkManager::begin()
     {
-        if (WifiParameters::wifiEnabled())
+
+        if (NetworkParameters::wifiEnabled())
         {
             WiFi.mode(WIFI_STA);
 
-            if (!WifiParameters::dhcpEnabled())
+            if (!NetworkParameters::dhcpEnabled())
             {
                 IPAddress localIP, gateway, subnet;
-                if (localIP.fromString(WifiParameters::ip()) &&
-                    gateway.fromString(WifiParameters::gateway()) &&
-                    subnet.fromString(WifiParameters::subnet()))
+                if (localIP.fromString(NetworkParameters::ip()) &&
+                    gateway.fromString(NetworkParameters::gateway()) &&
+                    subnet.fromString(NetworkParameters::subnet()))
                 {
                     WiFi.config(localIP, gateway, subnet, DNS_SERVER);
                     Serial.println("[WiFi] Static IP configuration applied.");
@@ -32,7 +33,7 @@ namespace configressif
                 }
             }
 
-            WiFi.begin(WifiParameters::ssid().c_str(), WifiParameters::password().c_str());
+            WiFi.begin(NetworkParameters::ssid().c_str(), NetworkParameters::password().c_str());
 
             unsigned long startAttemptTime = millis();
             const unsigned long TIMEOUT = 7000;
@@ -52,8 +53,7 @@ namespace configressif
             Serial.println("[WiFi] Failed to connect. Falling back to AP mode...");
         }
 
-        AccessPoint ap;
-        ap.begin("Configressif-Setup", "12345678");
+        AccessPoint::begin();
     }
 
 } // namespace configressif

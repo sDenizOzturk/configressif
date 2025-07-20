@@ -6,10 +6,10 @@
 namespace configressif
 {
 
-  class WifiConfig
+  class NetworkConfig
   {
   public:
-    static WifiConfig &instance();
+    static NetworkConfig &instance();
 
     void setFromJson(const JsonObject &obj);
     void toJson(JsonObject &obj) const;
@@ -22,13 +22,20 @@ namespace configressif
     bool wifiEnabled() const;
     bool dhcpEnabled() const;
 
-  private:
-    WifiConfig();
-    bool loadFromNVS();
-    bool saveToNVS() const;
+    void setWifiEnabled(bool enabled);
+    void setSsid(const String &ssid);
+    void setPassword(const String &password);
+    void setDhcpEnabled(bool enabled);
+    void setIp(const String &ip);
+    void setGateway(const String &gateway);
+    void setSubnet(const String &subnet);
 
-    bool m_wifiEnabled = false;
-    bool m_dhcpEnabled = true;
+  private:
+    NetworkConfig();
+
+    static bool m_initialized;
+    bool m_wifiEnabled;
+    bool m_dhcpEnabled;
     String m_ssid;
     String m_password;
     String m_ip;

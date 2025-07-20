@@ -4,7 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "build": "tsc -b && vite build",
+    "build:raw": "tsc -b && vite build",
+    "build": "npm run build:raw && vite build && npm run post-build",
+    "post-build": "npm run post-build:static-files && npm run post-build:default-configs",
+    "post-build:static-files": "mkdir -p ../workbench/data/public && mv ../workbench/data/index.html ../workbench/data/public/",
+    "post-build:default-configs": "mkdir -p ../workbench/data/default && cp -r ./private/static-defaults/* ../workbench/data/default/",
     "dev": "concurrently -k \"npm:dev:dummy\" \"vite\"",
     "dev:dummy": "npm --prefix ../dummy-server run dev",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
@@ -15,7 +19,8 @@
     "start:dummy-server": "tsc -p ../dummy-server && node ../dummy-server/dist/index.js",
     "start:full": "concurrently -k \"npm run start:dummy-server\" \"npm run start:frontend\"",
     "test:e2e": "start-server-and-test start:full http://localhost:5173 \"playwright test\"",
-    "test": "npm run build && npm run test:e2e"
+    "test": "npm run pre-test && npm run test:e2e",
+    "pre-test": "npm run build:raw && npx playwright install chromium"
   },
   "dependencies": {
     "connect-history-api-fallback": "^2.0.0",

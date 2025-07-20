@@ -1,135 +1,26 @@
 #include "ntpconfig.h"
-#include <Preferences.h>
 #include <SPIFFS.h>
 #include <ArduinoJson.h>
+#include "ntpvalidation.h"
+#include "ntpstorage.h"
 
 using namespace configressif;
 
-namespace
-{
-  Preferences prefs;
-  bool initialized = false;
+bool configressif::NtpConfig::m_initialized = false;
 
-  String getFirstServer()
-  {
-    File file = SPIFFS.open("/configs/ntp-servers.json", "r");
-    if (!file)
-      return "pool.ntp.org";
-
-    JsonDocument doc;
-    if (deserializeJson(doc, file) != DeserializationError::Ok)
-    {
-      file.close();
-      return "pool.ntp.org";
-    }
-    file.close();
-
-    if (!doc.is<JsonArray>() || doc.size() == 0)
-      return "pool.ntp.org";
-
-    return doc[0]["value"] | "pool.ntp.org";
-  }
-
-  int getFirstOffset()
-  {
-    File file = SPIFFS.open("/configs/timezone-offsets.json", "r");
-    if (!file)
-      return 0;
-
-    JsonDocument doc;
-    if (deserializeJson(doc, file) != DeserializationError::Ok)
-    {
-      file.close();
-      return 0;
-    }
-    file.close();
-
-    if (!doc.is<JsonArray>() || doc.size() == 0)
-      return 0;
-
-    return doc[0]["value"] | 0;
-  }
-
-  bool isServerValid(const String &value)
-  {
-    File file = SPIFFS.open("/configs/ntp-servers.json", "r");
-    if (!file)
-      return false;
-
-    JsonDocument doc;
-    if (deserializeJson(doc, file) != DeserializationError::Ok)
-    {
-      file.close();
-      return false;
-    }
-    file.close();
-
-    for (JsonObject obj : doc.as<JsonArray>())
-    {
-      if (obj["value"].as<String>() == value)
-        return true;
-    }
-
-    return false;
-  }
-
-  bool isOffsetValid(int value)
-  {
-    File file = SPIFFS.open("/configs/timezone-offsets.json", "r");
-    if (!file)
-      return false;
-
-    JsonDocument doc;
-    if (deserializeJson(doc, file) != DeserializationError::Ok)
-    {
-      file.close();
-      return false;
-    }
-    file.close();
-
-    for (JsonObject obj : doc.as<JsonArray>())
-    {
-      if (obj["value"].as<int>() == value)
-        return true;
-    }
-
-    return false;
-  }
-}
-
-NtpConfig::NtpConfig()
-{
-  loadFromNVS();
-}
+NtpConfig::NtpConfig() {}
 
 NtpConfig &NtpConfig::instance()
 {
   static NtpConfig config;
-  if (!initialized)
+  if (!config.m_initialized)
   {
-    config.loadFromNVS();
-    initialized = true;
+    config.m_initialized = true;
+    // Load configuration from storage
+    NtpStorage storage;
+    storage.load();
   }
   return config;
-}
-
-void NtpConfig::loadFromNVS()
-{
-  prefs.begin(NVS_NAMESPACE, true);
-  m_enabled = prefs.getBool("enabled", false);
-  m_server = prefs.getString("server", getFirstServer());
-  m_timezoneOffset = prefs.getInt("timezoneOffset", getFirstOffset());
-  prefs.end();
-}
-
-bool NtpConfig::saveToNVS() const
-{
-  prefs.begin(NVS_NAMESPACE, false);
-  prefs.putBool("enabled", m_enabled);
-  prefs.putString("server", m_server);
-  prefs.putInt("timezoneOffset", m_timezoneOffset);
-  prefs.end();
-  return true;
 }
 
 void NtpConfig::setFromJson(const JsonObject &json)
@@ -149,8 +40,8 @@ void NtpConfig::setFromJson(const JsonObject &json)
   if (json["server"].is<String>())
   {
     String newServer = json["server"].as<String>();
-    if (!isServerValid(newServer))
-      newServer = getFirstServer();
+    if (!NtpValidation::isServerValid(newServer))
+      newServer = NtpValidation::getFirstServer();
 
     if (newServer != m_server)
     {
@@ -162,8 +53,8 @@ void NtpConfig::setFromJson(const JsonObject &json)
   if (json["timezoneOffset"].is<int>())
   {
     int newOffset = json["timezoneOffset"].as<int>();
-    if (!isOffsetValid(newOffset))
-      newOffset = getFirstOffset();
+    if (!NtpValidation::isOffsetValid(newOffset))
+      newOffset = NtpValidation::getFirstOffset();
 
     if (newOffset != m_timezoneOffset)
     {
@@ -173,7 +64,10 @@ void NtpConfig::setFromJson(const JsonObject &json)
   }
 
   if (changed)
-    saveToNVS();
+  {
+    NtpStorage storage;
+    storage.save();
+  }
 }
 
 void NtpConfig::toJson(JsonObject &obj) const
@@ -186,3 +80,7 @@ void NtpConfig::toJson(JsonObject &obj) const
 bool NtpConfig::enabled() const { return m_enabled; }
 const String &NtpConfig::server() const { return m_server; }
 int NtpConfig::timezoneOffset() const { return m_timezoneOffset; }
+
+void NtpConfig::setEnabled(bool enabled) { m_enabled = enabled; }
+void NtpConfig::setServer(const String &server) { m_server = server; }
+void NtpConfig::setTimezoneOffset(int offset) { m_timezoneOffset = offset; }

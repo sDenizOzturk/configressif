@@ -1,0 +1,9 @@
+{
+  "wifiEnabled": false,
+  "ssid": "",
+  "password": "",
+  "dhcpEnabled": true,
+  "ip": "",
+  "gateway": "",
+  "subnet": ""
+}
