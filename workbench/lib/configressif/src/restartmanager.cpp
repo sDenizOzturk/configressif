@@ -1,8 +1,23 @@
 #include "restartmanager.h"
-#include "esp_timer.h"
+#include <esp_timer.h>
 
 namespace configressif
 {
+
+  void RestartManager::syncReboot(unsigned int delaySeconds, const char *message)
+  {
+    if (message && strlen(message) > 0)
+      Serial.println(message);
+
+    for (int i = delaySeconds; i > 0; --i)
+    {
+      Serial.printf("[configressif] Restarting device in %d seconds...\n", i);
+      delay(1000);
+    }
+    Serial.println("[configressif] Restarting now...");
+    ESP.restart();
+  }
+
   void restartCallback(void * /*arg*/)
   {
     Serial.println("[configressif] Restarting now...");
@@ -28,4 +43,5 @@ namespace configressif
     esp_timer_start_once(restartTimer, delaySeconds * 1000000); // microseconds
     Serial.printf("[configressif] Scheduled restart in %lu seconds...\n", delaySeconds);
   }
+
 }

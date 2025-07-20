@@ -10,9 +10,6 @@ namespace configressif
   public:
     static NtpConfig &instance();
 
-    void loadFromNVS();
-    bool saveToNVS() const;
-
     void setFromJson(const JsonObject &json);
     void toJson(JsonObject &json) const;
 
@@ -20,13 +17,16 @@ namespace configressif
     const String &server() const;
     int timezoneOffset() const;
 
+    void setEnabled(bool enabled);
+    void setServer(const String &server);
+    void setTimezoneOffset(int offset);
+
   private:
     NtpConfig();
 
-    bool m_enabled = false;
+    static bool m_initialized;
+    bool m_enabled;
     String m_server;
-    int m_timezoneOffset = 0;
-
-    static constexpr const char *NVS_NAMESPACE = "ntp_config";
+    int m_timezoneOffset;
   };
 }

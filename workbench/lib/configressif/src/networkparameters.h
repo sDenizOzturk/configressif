@@ -1,46 +1,46 @@
 #pragma once
 
-#include "wificonfig.h"
+#include "networkconfig.h"
 
 namespace configressif
 {
 
-  class WifiParameters
+  class NetworkParameters
   {
   public:
     static bool wifiEnabled()
     {
-      return WifiConfig::instance().wifiEnabled();
+      return NetworkConfig::instance().wifiEnabled();
     }
 
     static const String &ssid()
     {
-      return WifiConfig::instance().ssid();
+      return NetworkConfig::instance().ssid();
     }
 
     static const String &password()
     {
-      return WifiConfig::instance().password();
+      return NetworkConfig::instance().password();
     }
 
     static bool dhcpEnabled()
     {
-      return WifiConfig::instance().dhcpEnabled();
+      return NetworkConfig::instance().dhcpEnabled();
     }
 
     static const String &ip()
     {
-      return WifiConfig::instance().ip();
+      return NetworkConfig::instance().ip();
     }
 
     static const String &gateway()
     {
-      return WifiConfig::instance().gateway();
+      return NetworkConfig::instance().gateway();
     }
 
     static const String &subnet()
     {
-      return WifiConfig::instance().subnet();
+      return NetworkConfig::instance().subnet();
     }
   };
 

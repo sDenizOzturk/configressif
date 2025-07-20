@@ -1,0 +1,8 @@
+{
+  "apEnabled": true,
+  "apSsid": "Configressif-Setup",
+  "apPassword": "12345678",
+  "apIp": "192.168.168.168",
+  "apGateway": "192.168.168.168",
+  "apSubnet": "255.255.255.0"
+}

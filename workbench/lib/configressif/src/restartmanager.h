@@ -8,5 +8,6 @@ namespace configressif
   {
   public:
     static void schedule(unsigned long delaySeconds);
+    static void syncReboot(unsigned int delaySeconds = 5, const char *message = nullptr);
   };
 }

@@ -1,5 +1,5 @@
 #include "httpserver.h"
-#include "wificonfig.h"
+#include "networkconfig.h"
 #include "ntpconfig.h"
 #include "ntpmanager.h"
 #include "ntpstatus.h"
@@ -34,10 +34,12 @@ namespace configressif
 
     void HttpServer::handleStaticFiles()
     {
-        server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
+        server.serveStatic("/", SPIFFS, "/public").setDefaultFile("index.html");
+        server.serveStatic("/assets/", SPIFFS, "/assets");
+        server.serveStatic("/configs/", SPIFFS, "/configs");
 
         server.onNotFound([](AsyncWebServerRequest *request)
-                          { request->send(SPIFFS, "/index.html", "text/html"); });
+                          { request->send(SPIFFS, "/public/index.html", "text/html"); });
     }
 
     void HttpServer::handleNetworkGet()
@@ -46,7 +48,7 @@ namespace configressif
                   {
             JsonDocument doc;
             JsonObject jsonObject = doc.to<JsonObject>();
-            WifiConfig::instance().toJson(jsonObject);
+            NetworkConfig::instance().toJson(jsonObject);
     
             String json;
             serializeJson(doc, json);
@@ -71,7 +73,7 @@ namespace configressif
                     return;
                 }
 
-                WifiConfig::instance().setFromJson(doc.as<JsonObject>());
+                NetworkConfig::instance().setFromJson(doc.as<JsonObject>());
                 Serial.println("[configressif] New network settings saved.");
 
                 // Construct the response dynamically

@@ -1,0 +1,5 @@
+{
+  "enabled": true,
+  "server": "pool.ntp.org",
+  "timezoneOffset": 1
+}

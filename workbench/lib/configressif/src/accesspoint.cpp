@@ -1,19 +1,27 @@
 
 #include "accesspoint.h"
-
+#include "accesspointconfig.h"
 #include <WiFi.h>
 
 namespace configressif
 {
 
-  void AccessPoint::begin(const char *ssid, const char *password)
+  void AccessPoint::begin()
   {
+    const auto &apConfig = configressif::AccessPointConfig::instance();
+
+    if (!apConfig.apEnabled())
+      return;
+
     WiFi.mode(WIFI_AP);
-    IPAddress local_ip(192, 168, 168, 168);
-    IPAddress gateway(192, 168, 168, 168);
-    IPAddress subnet(255, 255, 255, 0);
-    WiFi.softAPConfig(local_ip, gateway, subnet);
-    WiFi.softAP(ssid, password);
+
+    IPAddress localIp, gateway, subnet;
+    localIp.fromString(apConfig.ip());
+    gateway.fromString(apConfig.gateway());
+    subnet.fromString(apConfig.subnet());
+
+    WiFi.softAPConfig(localIp, gateway, subnet);
+    WiFi.softAP(apConfig.ssid().c_str(), apConfig.password().c_str());
 
     Serial.print("[configressif] AP IP address: ");
     Serial.println(WiFi.softAPIP());

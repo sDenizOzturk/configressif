@@ -74,9 +74,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright with only Chromium
-        run: npx playwright install chromium
-
       - name: Run Playwright tests
         run: npm run test
 
@@ -100,6 +97,6 @@ jobs:
 
       - name: Verify files copied
         run: |
-          test -f data/index.html
+          test -f data/public/index.html
           test -d data/assets
           test -f lib/configressif/src/configressif.h
