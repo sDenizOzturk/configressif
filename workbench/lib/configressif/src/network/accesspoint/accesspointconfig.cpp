@@ -1,4 +1,4 @@
-#include "accesspointconfig.h"
+#include "network/accesspoint/accesspointconfig.h"
 #include <FS.h>
 #include <SPIFFS.h>
 

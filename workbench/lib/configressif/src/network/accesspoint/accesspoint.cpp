@@ -1,6 +1,6 @@
 
-#include "accesspoint.h"
-#include "accesspointconfig.h"
+#include "network/accesspoint/accesspoint.h"
+#include "network/accesspoint/accesspointconfig.h"
 #include <WiFi.h>
 
 namespace configressif

@@ -5,6 +5,63 @@
 
 ---
 
+## plan-6 (21:31 21.07.2025)
+
+### 🧭 Goal
+
+Modularize the C++ source structure and introduce a cleaner HTTP routing system using dedicated route classes.
+Also, define the future direction for authentication and system-level control endpoints.
+
+---
+
+### ✅ Completed
+
+#### 📁 Source Structure Refactor
+
+- Restructured `lib/configressif/` into modular directories:
+
+  - `network/`, `ntp/`, `storage/`, `system/`, `utils/`, `http/`
+
+- Moved `accesspoint.*` into `network/accesspoint/`
+- Kept `configressif.cpp/h` at the top level as the public entry point
+
+#### 🌐 HTTP Route Separation
+
+- Simplified existing `HttpServer` to focus only on:
+
+  - Starting the server
+  - Serving static files
+
+- Extracted endpoint logic into dedicated route classes:
+
+  - `NtpRoutes` handles `/api/ntp`
+  - `NetworkRoutes` handles `/api/network`
+
+- Each route class receives `AsyncWebServer&` via constructor injection
+- All route logic is now modular and bound explicitly through `setup()`
+
+---
+
+### 🧭 Future Work
+
+#### 🔐 Issue #13: [Add Authentication Middleware and Frontend Login UI](https://github.com/sDenizOzturk/configressif/issues/13)
+
+- Protect all API routes with password-based login
+- `POST /api/auth/login` endpoint to authenticate users
+- Store password in NVS; initial password from `/default/auth.json`
+- Frontend login page (`/login`) with global auth state
+- Dummy-server support for testing
+
+#### ⚙️ Issue #14: [Add System Settings API & UI (Restart, Factory Reset, Password Change)](https://github.com/sDenizOzturk/configressif/issues/14)
+
+- System routes under `/api/system/*`:
+- Restart, factory reset, password change, optional system info
+- Frontend system page with confirmation buttons
+- All actions require authentication
+- Integration with `RestartManager`, `AuthManager`, and `StorageManager`
+
+---
+
 ### plan-5 (23:35 20.07.2025)
 
 #### 🧭 **Goal**

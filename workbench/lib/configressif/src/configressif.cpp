@@ -1,9 +1,9 @@
 #include "configressif.h"
-#include "storagemanager.h"
-#include "networkmanager.h"
-#include "ntpmanager.h"
-#include "httpserver.h"
-#include "debugutils.h"
+#include "storage/storagemanager.h"
+#include "network/networkmanager.h"
+#include "ntp/ntpmanager.h"
+#include "http/httpserver.h"
+#include "utils/debugutils.h"
 
 namespace configressif
 {
