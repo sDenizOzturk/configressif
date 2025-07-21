@@ -12,12 +12,10 @@ namespace configressif
         void begin();
 
     private:
-        AsyncWebServer server;
+        AsyncWebServer m_server;
         void handleStaticFiles();
         void handleNetworkGet();
         void handleNetworkPost();
-        void handleNtpGet();
-        void handleNtpPost();
     };
 
 } // namespace configressif

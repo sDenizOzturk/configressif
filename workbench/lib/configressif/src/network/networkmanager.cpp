@@ -1,9 +1,9 @@
 
 
-#include "networkmanager.h"
-#include "accesspoint.h"
+#include "network/networkmanager.h"
+#include "network/accesspoint/accesspoint.h"
 #include <WiFi.h>
-#include "networkparameters.h"
+#include "network/networkparameters.h"
 
 namespace configressif
 {

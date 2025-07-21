@@ -1,9 +1,9 @@
-#include "storagemanager.h"
-#include "ntpstorage.h"
-#include "networkstorage.h"
+#include "storage/storagemanager.h"
+#include "ntp/ntpstorage.h"
+#include "network/networkstorage.h"
 #include <SPIFFS.h>
 #include <Preferences.h>
-#include "restartmanager.h"
+#include "system/restartmanager.h"
 #include <nvs_flash.h>
 
 namespace configressif

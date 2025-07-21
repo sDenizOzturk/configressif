@@ -1,6 +1,6 @@
 #pragma once
 
-#include "networkconfig.h"
+#include "network/networkconfig.h"
 
 namespace configressif
 {

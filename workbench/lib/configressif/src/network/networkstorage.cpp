@@ -1,5 +1,5 @@
-#include "networkstorage.h"
-#include "networkconfig.h"
+#include "network/networkstorage.h"
+#include "network/networkconfig.h"
 #include "SPIFFS.h"
 
 using namespace configressif;

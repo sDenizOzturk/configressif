@@ -1,7 +1,7 @@
-#include "networkconfig.h"
+#include "network/networkconfig.h"
 #include <ArduinoJson.h>
 #include <Preferences.h>
-#include "networkstorage.h"
+#include "network/networkstorage.h"
 
 using namespace configressif;
 
